@@ -208,7 +208,7 @@ class Game:
         screen.blit(surface, (column * SQUARE_SIZE, row * SQUARE_SIZE))
 
     def menu(self):
-        bg_color = (255, 255, 255)
+        bg_color = (254, 255, 255)
         self.GameScreen.fill(bg_color)
         black_color = (0, 0, 0)
         start_btn = pygame.Rect(270, 300, 100, 50)
