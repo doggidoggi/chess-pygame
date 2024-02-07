@@ -1,6 +1,5 @@
-import pygame
-from config import *
-from piece import Piece
+from src.constants import *
+from src.Game.Models.piece import Piece
 
 
 class Drag:
@@ -35,4 +34,3 @@ class Drag:
     def save_original_position(self):
         self.original_row = self.mouse_position[1] // SQUARE_SIZE
         self.original_column = self.mouse_position[0] // SQUARE_SIZE
-
