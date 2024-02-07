@@ -1,7 +1,11 @@
 import copy
-from config import *
-from piece import *
-from move import *
+from src.Game.Board.move import *
+from src.Game.Pieces.Bishop import Bishop
+from src.Game.Pieces.King import King
+from src.Game.Pieces.Knight import Knight
+from src.Game.Pieces.Pawn import Pawn
+from src.Game.Pieces.Queen import Queen
+from src.Game.Pieces.Rook import Rook
 
 
 class BaseBoard:
@@ -351,7 +355,6 @@ class Board(BaseBoard):  # определение класса Board для до
                                             else self.whiteKingPosition)
 
     def _setup_board(self):
-        """
         self.board[1][7] = Pawn(piece_color=BLACK)  # Пешки черного цвета.
         self.board[1][6] = Pawn(piece_color=BLACK)
         self.board[1][5] = Pawn(piece_color=BLACK)
@@ -369,23 +372,25 @@ class Board(BaseBoard):  # определение класса Board для до
         self.board[6][5] = Pawn(piece_color=WHITE)
         self.board[6][6] = Pawn(piece_color=WHITE)
         self.board[6][7] = Pawn(piece_color=WHITE)
-        """
-        """
+
         self.board[7][1] = Knight(piece_color=WHITE)  # Легкие фигуры белого цвета.
         self.board[7][2] = Bishop(piece_color=WHITE)
         self.board[7][5] = Bishop(piece_color=WHITE)
         self.board[7][6] = Knight(piece_color=WHITE)
+
         self.board[0][1] = Knight(piece_color=BLACK)  # Легкие фигуры черного цвета.
         self.board[0][2] = Bishop(piece_color=BLACK)
         self.board[0][5] = Bishop(piece_color=BLACK)
         self.board[0][6] = Knight(piece_color=BLACK)
-        """
+
         self.board[7][0] = Rook(piece_color=WHITE)  # Тяжелые фигуры белого цвета.
         self.board[7][3] = Queen(piece_color=WHITE)
         self.board[7][7] = Rook(piece_color=WHITE)
+
         self.board[0][0] = Rook(piece_color=BLACK)  # Тяжелые фигуры черного цвета.
         self.board[0][3] = Queen(piece_color=BLACK)
         self.board[0][7] = Rook(piece_color=BLACK)
+
         self.board[7][4] = King(piece_color=WHITE)  # Белый король.
         self.board[0][4] = King(piece_color=BLACK)  # Черный король.
 
