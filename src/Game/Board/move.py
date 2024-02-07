@@ -1,4 +1,7 @@
-from piece import *
+from src.Game.Models.piece import *
+from src.Game.Pieces.King import King
+from src.Game.Pieces.Pawn import Pawn
+from src.constants import *
 
 
 class Move:
