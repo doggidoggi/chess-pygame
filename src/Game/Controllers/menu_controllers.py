@@ -1,33 +1,64 @@
-import src.constants
-from src.Game.Board.chessboard import *
-from src.Game.Controllers.dragger import Drag
+import pygame.time
+
+import src.config
+from src.Game.Controllers.game_controllers import Game
+from src.GUI.menu_drawer import *
+from src.config import *
 
 
 class Menu:
-    def __init__(self, window):
+    def __init__(self, window, settings):
         self.GameScreen = window
-        self.GameScreen.fill(color=pygame.Color(184, 139, 74))
+        self.config = settings
 
-        self.settings = src.constants
+        self.MenuDrawer = MainMenuDrawer(window=self.GameScreen, settings=self.config)
         self.in_menu = True
+        self.clock = pygame.time.Clock()
 
     def main_loop(self):
         while self.in_menu:
+            self.MenuDrawer.draw()
+            self.clock.tick(FPS)
             for event in pygame.event.get():
-                pass
+                if event.type == pygame.QUIT:
+                    self.in_menu = False
+                elif event.type == pygame.MOUSEBUTTONUP and event.button == LEFT_CLICK:
+                    self.__handle_lmb_up()
 
     def play_sound(self, move, is_error_action=False):
-        if is_error_action:
-            self.settings.error_action_sound.play_sound()
-        elif self.ChessBoard.is_variant_checkmate():
-            self.settings.game_end_sound.play_sound()
-        elif self.ChessBoard.is_variant_stalemate():
-            self.settings.game_draw_sound.play_sound()
-        elif self.ChessBoard.is_variant_check():
-            self.settings.check_sound.play_sound()
-        elif move.capturedPiece is not None:
-            self.settings.move_capture_sound.play_sound()
-        else:
-            self.settings.move_sound.play_sound()
+        pass
+
+    def __handle_lmb_up(self):
+        game = Game(window=self.GameScreen, settings=self.config)
+        mouse_position = pygame.mouse.get_pos()
+        if self.MenuDrawer.opposite_chess_button.collidepoint(mouse_position) and self.MenuDrawer.in_PVP_setup:
+            game.opposite_chess()
+        elif self.MenuDrawer.without_timer_button.collidepoint(mouse_position) and self.MenuDrawer.in_PVP_setup:
+            game.without_timer()
+        elif self.MenuDrawer.checkers_button.collidepoint(mouse_position) and self.MenuDrawer.in_PVP_setup:
+            game.checkers()
+        elif self.MenuDrawer.until_check_button.collidepoint(mouse_position) and self.MenuDrawer.in_PVP_setup:
+            game.until_the_first_check()
+        elif self.MenuDrawer.marseille_chess_button.collidepoint(mouse_position) and self.MenuDrawer.in_PVP_setup:
+            game.marseille_chess()
+        elif self.MenuDrawer.nuclear_chess_button.collidepoint(mouse_position) and self.MenuDrawer.in_PVP_setup:
+            game.nuclear_chess()
+        elif self.MenuDrawer.mini_chess_button.collidepoint(mouse_position) and self.MenuDrawer.in_PVP_setup:
+            game.mini_chess()
+        elif self.MenuDrawer.chess_960_button.collidepoint(mouse_position) and self.MenuDrawer.in_PVP_setup:
+            game.chess_960()
+        elif self.MenuDrawer.multiplayer_button.collidepoint(mouse_position) and self.MenuDrawer.in_main_menu:
+            self.MenuDrawer.set_page_in_main_menu(False)
+            self.MenuDrawer.set_page_in_PVP_setup(True)
+            click_sound.play_sound()
+        elif self.MenuDrawer.singleplayer_button.collidepoint(mouse_position) and self.MenuDrawer.in_main_menu:
+            self.MenuDrawer.set_page_in_main_menu(False)
+            self.MenuDrawer.set_page_in_AI_setup(True)
+            click_sound.play_sound()
+        elif (self.MenuDrawer.quit_button.collidepoint(mouse_position) and self.MenuDrawer.in_PVP_setup
+              or self.MenuDrawer.quit_button.collidepoint(mouse_position) and self.MenuDrawer.in_AI_setup):
+            self.MenuDrawer.set_page_in_main_menu(True)
+            self.MenuDrawer.set_page_in_PVP_setup(False)
+            click_sound.play_sound()
 
 

@@ -1,15 +1,17 @@
 import pygame
-from src.Game.Controllers.game_controllers import Game
-from constants import *
+from src.Game.Controllers.menu_controllers import Menu
+from config import *
 
 
 def main():
     pygame.init()
     pygame.font.init()
-    window = pygame.display.set_mode((WIDTH, HEIGHT), flags=pygame.SRCALPHA)
+    config = Config()
+    window = pygame.display.set_mode((WIDTH, HEIGHT))
     pygame.display.set_caption('Шахматы')
-    game = Game(window)
-    game.main_loop()
+    icon = pygame.transform.smoothscale(pygame.image.load(ICON_PATH), (80, 80))
+    pygame.display.set_icon(icon)
+    Menu(window, config).main_loop()
     pygame.quit()
 
 

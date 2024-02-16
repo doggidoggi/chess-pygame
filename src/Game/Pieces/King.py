@@ -1,5 +1,4 @@
-from src.Game.Models.piece import Piece
-from src.constants import *
+from src.Game.Pieces.piece import Piece
 
 
 class King(Piece):

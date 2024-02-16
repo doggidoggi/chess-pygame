@@ -1,4 +1,4 @@
-from src.constants import *
+from src.config import *
 
 
 class Piece:

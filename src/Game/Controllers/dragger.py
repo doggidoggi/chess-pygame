@@ -1,9 +1,9 @@
-from src.constants import *
-from src.Game.Models.piece import Piece
+from src.config import *
+from src.Game.Pieces.piece import Piece
 
 
 class Drag:
-    def __init__(self):
+    def __init__(self, settings):
         self.mouse_position = ()
         self.dragged_piece: Piece = None
         self.original_row = 0
@@ -11,6 +11,7 @@ class Drag:
         self.DRAGGING_FLAG = False
         self.current_row = 0
         self.current_column = 0
+        self.config = settings
 
     def draw_dragged_piece(self, screen):
         image = IMAGES128[self.dragged_piece.symbol()]
@@ -28,9 +29,9 @@ class Drag:
 
     def update_mouse_position(self, new_position):
         self.mouse_position = new_position
-        self.current_row = self.mouse_position[1] // SQUARE_SIZE
-        self.current_column = self.mouse_position[0] // SQUARE_SIZE
+        self.current_row = self.mouse_position[1] // self.config.SQUARE_SIZE
+        self.current_column = self.mouse_position[0] // self.config.SQUARE_SIZE
 
     def save_original_position(self):
-        self.original_row = self.mouse_position[1] // SQUARE_SIZE
-        self.original_column = self.mouse_position[0] // SQUARE_SIZE
+        self.original_row = self.mouse_position[1] // self.config.SQUARE_SIZE
+        self.original_column = self.mouse_position[0] // self.config.SQUARE_SIZE
