@@ -4,7 +4,7 @@
 ## Геймплей
 Эта игра поддерживает игру **Игрок против Игрока** и **Игрок против Компьютера**. В игре **Игрок против Компьютера**
 можно играть и за чёрных, и за белых.
-![Тест](https://github.com/doggidoggi/chess-pygame/tree/main/assets/images/snapshots/img.png?raw=true)
+![My Image](../assets/images/snapshots/img.png)
 
 ### Варианты режимов игры
 - **До первого шаха**
