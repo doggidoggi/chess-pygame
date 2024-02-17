@@ -5,6 +5,7 @@ from src.Game.Board.chessboard import *
 from src.Game.Controllers.dragger import Drag
 from src.GUI.classic_chess_drawer import *
 from src.GUI.mini_chess_drawer import *
+from src.Game.AI.AI_main import *
 from src.constants import *
 
 
@@ -38,8 +39,13 @@ class Game:
 
         self.clock = pygame.time.Clock()
 
+        self.human_turn = True
+        self.player_two = False
+        self.player_one = True
+        self.AI_move = None
+
     def __check_for_game_end(self):
-        if self.ChessBoard.is_variant_checkmate() or self.ChessBoard.is_variant_stalemate():
+        if self.ChessBoard.game_end:
             self.game_end = True
             self.__play_sound(None, force_end=True)
 
@@ -170,9 +176,6 @@ class Game:
             self.__handle_events()
         pygame.quit()
 
-    def bird_chess(self):
-        pass
-
     def without_timer(self):
         pygame.event.clear()
         self.config.change_square(8)
@@ -184,6 +187,25 @@ class Game:
         pygame.display.flip()
         game_start_sound.play_sound()
         while self.mainloop:
+            if not self.game_end:
+                self.__check_for_game_end()
+            self.__update_mouse_position()
+            self.__handle_events()
+        pygame.quit()
+
+    def against_ai(self):
+        pygame.event.clear()
+        self.config.change_square(8)
+        self.ChessBoard = WithoutTimerChess()
+        self.ValidMoves = self.ChessBoard.getValidMoves()
+        self.GameDrawer = ChessDrawer(window=self.GameScreen, board=self.ChessBoard, valid_moves=self.ValidMoves,
+                                      dragger=self.ChessDragger, settings=self.config)
+        self.__draw_game()
+        pygame.display.flip()
+        game_start_sound.play_sound()
+        while self.mainloop:
+            self.human_turn = ((self.player_one and self.ChessBoard.whiteMove) or
+                               (self.player_two and self.ChessBoard.whiteMove))
             if not self.game_end:
                 self.__check_for_game_end()
             self.__update_mouse_position()
@@ -205,7 +227,7 @@ class Game:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:  # выход из игры
                 self.mainloop = False
-            elif not self.game_end:
+            elif not self.game_end and self.human_turn:
                 if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
                     self.__update_drag(event)
                     self.__handle_lbm_pressed()
@@ -217,11 +239,19 @@ class Game:
                       pygame.key.get_mods() & pygame.KMOD_LCTRL):
                     self.__undo_move()
             self.__draw_game()
-            if self.ChessDragger.DRAGGING_FLAG:
+            if self.ChessDragger.DRAGGING_FLAG and self.human_turn:
                 self.GameDrawer.draw_squares((self.ChessDragger.current_row, self.ChessDragger.current_column))
                 self.ChessDragger.draw_dragged_piece(self.GameScreen)
             self.clock.tick(FPS)
             pygame.display.flip()
+            if not self.game_end and not self.human_turn:
+                self.AI_move = get_random_move(self.ValidMoves)
+                self.ChessBoard.make_move(self.AI_move)
+                self.PIECE_MOVED_FLAG = True
+                self.last_move = self.AI_move
+                self.PlayerClicksLog = []
+                self.PlayerSelectedCell = ()
+                print(len(self.ValidMoves))
             if self.PIECE_MOVED_FLAG:
                 self.__play_sound(self.last_move, is_nuclear=self.nuclear_game_mode)
                 self.ValidMoves = self.ChessBoard.getValidMoves()
@@ -229,7 +259,7 @@ class Game:
                 self.PIECE_MOVED_FLAG = not self.PIECE_MOVED_FLAG
             if self.game_end:
                 time.sleep(5)
-                pygame.quit()  # TODO: Реализовать возвращение в главное меню
+                pygame.quit()
 
     def __undo_move(self):
         self.ChessBoard.undoMove()

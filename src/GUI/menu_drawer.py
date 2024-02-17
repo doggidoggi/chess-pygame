@@ -29,8 +29,6 @@ class MainMenuDrawer:
         self.marseille_chess_button_surface = None
         self.mini_chess_button = None
         self.mini_chess_button_surface = None
-        self.bird_chess_button = None
-        self.bird_chess_button_surface = None
 
         self.quit_button = None
         self.quit_button_surface = None
@@ -93,24 +91,18 @@ class MainMenuDrawer:
                                                                        bold=True),
                                                    self.button_font_color, color, '960', WIDTH, HEIGHT)
         y_axis = height * 2.5
-        self.bird_chess_button = pygame.Rect(x_axis, y_axis, width, height)
-        self.bird_chess_button_surface = get_button(self.bird_chess_button,
-                                                    pygame.font.SysFont('Ubuntu', 20,
-                                                                        bold=True),
-                                                    self.button_font_color, color, 'Птичьи', WIDTH, HEIGHT)
-        y_axis = height * 5.5
         self.checkers_button = pygame.Rect(x_axis, y_axis, width, height)
         self.checkers_button_surface = get_button(self.checkers_button,
                                                   pygame.font.SysFont('Ubuntu', 20,
                                                                       bold=True),
                                                   self.button_font_color, color, 'Шашки', WIDTH, HEIGHT)
-        y_axis = height * 1
-        x_axis = WIDTH / 2 + width / 1.2
+        y_axis = height * 5.5
         self.marseille_chess_button = pygame.Rect(x_axis, y_axis, width, height)
         self.marseille_chess_button_surface = get_button(self.marseille_chess_button,
                                                          pygame.font.SysFont('Ubuntu', 20,
                                                                              bold=True),
                                                          self.button_font_color, color, 'Марсельские', WIDTH, HEIGHT)
+        x_axis = WIDTH / 2 + width / 1.2
         y_axis = height * 5.5
         self.quit_button = pygame.Rect(x_axis, y_axis, width, height)
         self.quit_button_surface = get_button(self.quit_button,
@@ -140,7 +132,6 @@ class MainMenuDrawer:
             self.GameScreen.blit(self.opposite_chess_button_surface, (0, 0))
             self.GameScreen.blit(self.chess_960_button_surface, (0, 0))
             self.GameScreen.blit(self.checkers_button_surface, (0, 0))
-            self.GameScreen.blit(self.bird_chess_button_surface, (0, 0))
             self.GameScreen.blit(self.marseille_chess_button_surface, (0, 0))
             self.GameScreen.blit(self.mini_chess_button_surface, (0, 0))
         elif self.in_AI_setup:

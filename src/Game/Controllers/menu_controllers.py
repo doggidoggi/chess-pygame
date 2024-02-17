@@ -25,9 +25,6 @@ class Menu:
                 elif event.type == pygame.MOUSEBUTTONUP and event.button == LEFT_CLICK:
                     self.__handle_lmb_up()
 
-    def play_sound(self, move, is_error_action=False):
-        pass
-
     def __handle_lmb_up(self):
         game = Game(window=self.GameScreen, settings=self.config)
         mouse_position = pygame.mouse.get_pos()
@@ -52,9 +49,7 @@ class Menu:
             self.MenuDrawer.set_page_in_PVP_setup(True)
             click_sound.play_sound()
         elif self.MenuDrawer.singleplayer_button.collidepoint(mouse_position) and self.MenuDrawer.in_main_menu:
-            self.MenuDrawer.set_page_in_main_menu(False)
-            self.MenuDrawer.set_page_in_AI_setup(True)
-            click_sound.play_sound()
+            game.against_ai()
         elif (self.MenuDrawer.quit_button.collidepoint(mouse_position) and self.MenuDrawer.in_PVP_setup
               or self.MenuDrawer.quit_button.collidepoint(mouse_position) and self.MenuDrawer.in_AI_setup):
             self.MenuDrawer.set_page_in_main_menu(True)

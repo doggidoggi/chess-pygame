@@ -2,6 +2,7 @@ import copy
 import random
 
 from src.Game.Board.move import *
+from src.Game.Pieces.piece import *
 from src.Game.Pieces.Bishop import Bishop
 from src.Game.Pieces.King import King
 from src.Game.Pieces.Knight import Knight
@@ -390,10 +391,6 @@ class BaseBoard:
         return ''
 
 
-class ClassicChess(BaseBoard):  # TODO-LIST: Доделать классы для режимов игры и реализовать таймер для классической игры
-    pass
-
-
 class OppositeChess(BaseBoard):
     def __init__(self):
         super().__init__()
@@ -491,6 +488,34 @@ class MarseilleChess(BaseBoard):
         super().__init__()
         self._setup_board()
         self.now_move = 1
+
+    def undoMove(self):
+        if self.moveHistory:
+            move = self.moveHistory.pop()
+            self.board[move.endRow][move.endColumn] = move.capturedPiece
+            self.board[move.startRow][move.startColumn] = move.movedPiece
+            move.movedPiece.moved = False
+            if not self.now_move < 2:
+                self.whiteMove = not self.whiteMove
+            if move.movedPiece.symbol() == 'wKing':
+                self.whiteKingPosition = (move.startRow, move.startColumn)
+            elif move.movedPiece.symbol() == 'bKing':
+                self.blackKingPosition = (move.startRow, move.startColumn)
+            if move.is_en_passant_move:
+                self.board[move.endRow][move.endColumn] = None
+                self.board[move.startRow][move.endColumn] = move.capturedPiece
+                self.possible_en_passant = (move.endRow, move.endColumn)
+            if isinstance(move.movedPiece, Pawn) and abs(move.startRow - move.endRow) == 2:
+                self.possible_en_passant = ()
+            if move.is_castle_move:
+                if move.endColumn - move.startColumn == 2:
+                    self.board[move.startRow][move.startColumn] = move.movedPiece
+                    self.board[move.endRow][7] = self.board[move.endRow][move.endColumn - 1]
+                    self.board[move.endRow][move.endColumn - 1] = None
+                else:
+                    self.board[move.startRow][move.startColumn] = move.movedPiece
+                    self.board[move.endRow][0] = self.board[move.endRow][move.endColumn + 1]
+                    self.board[move.endRow][move.endColumn + 1] = None
 
     def make_move(self, move: Move):
         if (move.movedPiece.piece_color == WHITE and self.whiteMove or
@@ -617,10 +642,6 @@ class WithoutTimerChess(BaseBoard):  # определение класса Board
                 self.piece_to_promote = (move.endRow, move.endColumn)
             move.movedPiece.moved = True
             self.whiteMove = not self.whiteMove
-
-
-class BirdChess(BaseBoard):
-    pass
 
 
 class NukeBoard(BaseBoard):
