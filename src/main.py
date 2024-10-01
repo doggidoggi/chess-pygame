@@ -8,7 +8,7 @@ def main():
     pygame.font.init()
     config = Config()
     window = pygame.display.set_mode((WIDTH, HEIGHT))
-    pygame.display.set_caption('Шахматы')
+    pygame.display.set_caption('Шахматы PYGAME')
     icon = pygame.transform.smoothscale(pygame.image.load(ICON_PATH), (80, 80))
     pygame.display.set_icon(icon)
     Menu(window, config).main_loop()
