@@ -10,8 +10,7 @@ class CheckersDrawer:
         self.Dragger = dragger
         self.config = settings
 
-    def __setup_window(self):
-        self.GameScreen.fill(color=pygame.Color(184, 139, 74))
+    def __setup_window(self): self.GameScreen.fill(color=pygame.Color(184, 139, 74))
 
     def update_valid_moves(self, valid_moves):
         self.ValidMoves = valid_moves
